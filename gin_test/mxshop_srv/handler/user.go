@@ -8,7 +8,6 @@ import (
 	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/types/known/emptypb"
 	"gopro/gin_test/mxshop_srv/global"
 	"gopro/gin_test/mxshop_srv/model"
 	"gopro/gin_test/mxshop_srv/proto"
@@ -17,7 +16,13 @@ import (
 	"time"
 )
 
-type UserServer struct{}
+
+type UserServer struct{
+	proto.UnimplementedUserServer
+}
+
+
+
 func ModelToRep(user model.User)proto.UserInfoRes{
 	//grpc 的message字段 有默认值 你不能随便赋值nil进去，容易出错
 	// 这里要搞清，哪些字段是有默认值的
@@ -118,7 +123,7 @@ func (c *UserServer) CreateUser(ctx context.Context, req *proto.CreateUserInfo) 
 	userRep:=ModelToRep(user)
 	return &userRep,nil
 }
-func (c *UserServer) UpdateUser(ctx context.Context, req *proto.UpdateUserInfo) (*emptypb.Empty, error){
+func (c *UserServer) UpdateUser(ctx context.Context, req *proto.UpdateUserInfo) (*empty.Empty, error){
 	//
 	var user model.User
 	result:=global.DB.First(&user,req.Id)
@@ -135,7 +140,7 @@ func (c *UserServer) UpdateUser(ctx context.Context, req *proto.UpdateUserInfo) 
 	}
 	return &empty.Empty{},nil
 }
-func (c *UserServer) CheckPassWord(ctx context.Context, req *proto.PassWordInfo,) (*proto.CheckRes, error) {
+func (c *UserServer) CheckPassWord(ctx context.Context, req *proto.PassWordInfo) (*proto.CheckRes, error) {
 	//校验密码
 	passwordInfo:=strings.Split(req.EncryptedPassword,"$")
 	options := &password.Options{16, 100, 32, sha512.New}
