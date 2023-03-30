@@ -1,11 +1,8 @@
-package main
+package initialize
 
 import (
-	"crypto/sha512"
 	"fmt"
-	"github.com/anaskhan96/go-password-encoder"
-	"gopro/gin_test/mxshop_srv/model"
-	//"gopro/gin_test/mxshop_srv/models"
+	"gopro/gin_test/mxshop_srv/global"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -15,9 +12,7 @@ import (
 	"time"
 )
 
-
-
-func main() {
+func InitDB(){
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer（日志输出的目标，前缀和日志包含的内容——译者注）
 		logger.Config{
@@ -27,8 +22,9 @@ func main() {
 			Colorful:      false,         // 禁用彩色打印
 		},
 	)
-
-	db, err := gorm.Open(mysql.Open("root:123456@tcp(127.0.0.1:3306)/zc_shop_user_srv?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{
+	var err error
+	fmt.Println(global.ServerConfig.MysqlInfo.Port,"global.ServerConfig")
+	global.DB, err = gorm.Open(mysql.Open("root:123456@tcp(127.0.0.1:3306)/zc_shop_user_srv?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{
 		Logger: newLogger,
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
@@ -37,21 +33,6 @@ func main() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	db.AutoMigrate(&model.User{})
 
-	options:=&password.Options{16,100,32,sha512.New}
-	salt,encodedPwd:=password.Encode("admin123",options)
-	newPassword:=fmt.Sprintf("$ekko307$%s$%s",salt,encodedPwd)
-	for i:=0;i<10;i++{
-		user:=model.User{
-			NickName: fmt.Sprintf("boddy%d",i),
-			Mobile:fmt.Sprintf("boddy%d",i),
-			Password:newPassword,
-		}
-		db.Save(&user)
-	}
-
-	//
-	//db.AutoMigrate(&models.User{})
 
 }

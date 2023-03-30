@@ -1,0 +1,10 @@
+name: 'user_srv'
+mysql:
+  port: 3306
+  host: '192.168.3.21'
+  user: 'root'
+  password: '123456'
+  db: 'zc_shop_user_srv'
+consul:
+  host: '192.168.3.21'
+  port: 8500

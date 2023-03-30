@@ -21,11 +21,11 @@ func GetEnvInfo(env string)bool{
 func main(){
 	debug:=GetEnvInfo("MXSHOP_DEBUG")
 	configPrefix:="config"
-	configName:=fmt.Sprintf("%spro.yaml",configPrefix)
+	configName:=fmt.Sprintf("gin_test/mxshop-api/user-web/%spro.yaml",configPrefix)
 	v:=viper.New()
 	//文件路径如何设置
 	if debug{
-		configName=fmt.Sprintf("%sbug.yaml",configPrefix)
+		configName=fmt.Sprintf("gin_test/mxshop-api/user-web/%sbug.yaml",configPrefix)
 	}
 
 	v.SetConfigFile(configName)

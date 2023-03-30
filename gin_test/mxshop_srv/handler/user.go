@@ -44,6 +44,8 @@ func (c *UserServer) GetUserList(ctx context.Context,req *proto.PageInfo)(*proto
 	if result.Error!=nil{
 		return nil,result.Error
 	}
+	//
+	fmt.Println("用户列表******")
 	rsp:=&proto.UserListRes{
 
 	}
@@ -114,7 +116,7 @@ func (c *UserServer) CreateUser(ctx context.Context, req *proto.CreateUserInfo) 
 	//
 	// Using custom options
 	options := &password.Options{16, 100, 32, sha512.New}
-	salt, encodedPwd := password.Encode("generic password", options)
+	salt, encodedPwd := password.Encode(req.PassWord, options)
 	user.Password=fmt.Sprintf("$pbkdf2-sha512$%s$%s",salt,encodedPwd)
 	result=global.DB.Create(&user)
 	if result.Error!=nil{

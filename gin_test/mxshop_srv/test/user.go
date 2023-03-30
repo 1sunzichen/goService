@@ -39,7 +39,7 @@ func TestGetUserList(){
 	}
 }
 func TestCreateUser(){
-	for i:=0;i<10;i++{
+	for i:=1;i<10;i++{
 		createRsp,err:=userClient.CreateUser(context.Background(),&proto.CreateUserInfo{
 			NickName: fmt.Sprintf("boddy%d",i),
 			Mobile:fmt.Sprintf("boddy%d",i),
@@ -53,7 +53,7 @@ func TestCreateUser(){
 }
 func main(){
 	Init()
-	//TestCreateUser()
-	TestGetUserList()
+	TestCreateUser()
+	//TestGetUserList()
 	conn.Close()
 }
