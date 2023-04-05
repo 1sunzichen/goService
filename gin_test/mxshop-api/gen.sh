@@ -10,6 +10,6 @@ function genProto {
 
 }
 
-
-genProto user-web user
+genProto goods-web goods
+#genProto user-web user
 #genProto  hello
