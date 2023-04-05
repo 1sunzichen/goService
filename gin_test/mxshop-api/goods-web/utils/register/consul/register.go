@@ -4,11 +4,25 @@ import (
 	"fmt"
 	"github.com/hashicorp/consul/api"
 )
+type Register struct{
+	Host string
+	Port int
+}
+type RegisterClient interface{
+	Register(address string, port int, name string, tags []string, id string)(error)
+	DeRegister(id string)error
+}
+func NewRegister(host string,port int)RegisterClient{
+	return &Register{
+		Host: host,
+		Port: port,
+	}
 
-func Register(address string, port int, name string, tags []string, id string,srcPort int)(*api.Client, error) {
+}
+func (r *Register)Register(address string, port int, name string, tags []string, id string)(error) {
 	fmt.Println(address,port,name)
 	cfg := api.DefaultConfig()
-	cfg.Address = fmt.Sprintf("%s:%d",address,port)
+	cfg.Address = fmt.Sprintf("%s:%d",r.Host,r.Port)
 
 	client, err := api.NewClient(cfg)
 	if err != nil {
@@ -27,7 +41,7 @@ func Register(address string, port int, name string, tags []string, id string,sr
 	registration.Name = name
 	registration.ID = id
 	//registration.Port = 50051
-	registration.Port = srcPort
+	registration.Port = port
 	registration.Tags = tags
 	registration.Address = address
 	//registration.Check = check
@@ -36,5 +50,19 @@ func Register(address string, port int, name string, tags []string, id string,sr
 	if err != nil {
 		panic(err)
 	}
-	return client,nil
+	return nil
+}
+func (r *Register)DeRegister(id string)error{
+	cfg := api.DefaultConfig()
+	cfg.Address = fmt.Sprintf("%s:%d",r.Host,r.Port)
+
+	client, err := api.NewClient(cfg)
+	if err != nil {
+		panic(err)
+	}
+	err = client.Agent().ServiceDeregister(id)
+	if err != nil {
+		panic(err)
+	}
+	return nil
 }

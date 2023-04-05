@@ -2,16 +2,20 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
+	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"gopro/gin_test/mxshop-api/goods-web/global"
 	"gopro/gin_test/mxshop-api/goods-web/initialize"
 	"gopro/gin_test/mxshop-api/goods-web/utils"
+	"gopro/gin_test/mxshop-api/goods-web/utils/register/consul"
 	validatorss "gopro/gin_test/mxshop-api/goods-web/validator"
+	"os"
+	"os/signal"
+	"syscall"
 )
 //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJRCI6NTksIk5pY2tOYW1lIjoiYm9kZHk5IiwiQXV0aG9yaXR5SWQiOjEsImV4cCI6MTY4ODQzNTA1OSwiaXNzIjoiemMiLCJuYmYiOjE2Nzk3OTUwNTl9.-OwFSUC9AOr0OMDDt6D8pkqan2YSwzUg6bgCZJd-Adc
 func main(){
@@ -56,17 +60,25 @@ func main(){
 			 return t
 		 })
 	 }
-	if err:=r.Run(fmt.Sprintf(":%d",port));err!=nil{
-		zap.S().Panic("启动失败",err.Error())
-	}
-	//Router:=gin.Default()
-	r.GET("/ping", func(context *gin.Context) {
-		context.JSON(200,"pong")
-	})
-	////有问题🤨
-	//if err:=r.Run(fmt.Sprintf(":%d",global.ServerConfig.Port));err!=nil{
-	//	zap.S().Panic("启动失败",err.Error())
-	//}
 
-	//r.Run(":"+port)
+	 registerClient :=consul.NewRegister(global.ServerConfig.ConsulInfo.Host,global.ServerConfig.ConsulInfo.Port)
+	 serviceId:=fmt.Sprintf("%s",uuid.NewV4())
+	 err=registerClient.Register("127.0.0.1",global.ServerConfig.Port,global.ServerConfig.Name,[]string{"web服务","商品服务"},serviceId)
+	 if err!=nil{
+	 	zap.S().Panic("服务注册失败",err.Error())
+	 }
+	 go func() {
+		 if err:=r.Run(fmt.Sprintf(":%d",port));err!=nil{
+			 zap.S().Panic("启动失败",err.Error())
+		 }
+	 }()
+	quit:=make(chan os.Signal)
+	signal.Notify(quit,syscall.SIGINT,syscall.SIGTERM)
+	<-quit
+	if err=registerClient.DeRegister(serviceId);err!=nil{
+		zap.S().Info("服务发现注销goods-web失败")
+	}else{
+		zap.S().Info("服务发现注销goods-web成功")
+	}
+
 }
