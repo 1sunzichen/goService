@@ -1,5 +1,7 @@
-name: zichen
+name: "user-web"
 port: 8022
+host: "127.0.0.1"
+tags: ["mxshop","web服务","商品服务"]
 user_srv:
   name: 'user_srv'
 jwt:

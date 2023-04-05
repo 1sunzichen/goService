@@ -9,6 +9,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"gopro/gin_test/mxshop-api/goods-web/forms"
 	"gopro/gin_test/mxshop-api/goods-web/global"
 	"gopro/gin_test/mxshop-api/goods-web/proto"
 	"strconv"
@@ -181,4 +182,155 @@ func List(c *gin.Context)  {
 
 
 }
+func New(c *gin.Context){
+	goodsFrom:=forms.GoodsForm{}
+	if err:=c.ShouldBind(&goodsFrom);err!=nil{
+		HandleVaildatorError(c,err)
+		return
+	}
+	goodsSrvClient:=global.GoodsSrvClient
+	rsp,err:=goodsSrvClient.CreateGoods(context.Background(),&proto.CreateGoodsInfo{
+		Name:            goodsFrom.Name,
+		GoodsSn:         goodsFrom.GoodsSn,
+		Stocks:          goodsFrom.Stocks,
+		MarketPrice:     goodsFrom.MarketPrice,
+		ShopPrice:       goodsFrom.ShopPrice,
+		GoodsBrief:      goodsFrom.GoodsBrief,
+		GoodsDesc:       goodsFrom.GoodsDesc,
+		ShipFree:        *goodsFrom.ShipFree,
+		Images:          goodsFrom.Images,
+		DescImages:      goodsFrom.DescImages,
+		GoodsFrontImage: goodsFrom.FrontImage,
+		IsNew:           false,
+		IsHot:           false,
+		OnSale:          false,
+		CategoryId:      goodsFrom.CategoryId,
+		BrandId:         goodsFrom.Brand,
+	})
+	if err!=nil{
+		panic(err)
+	}
+	//商品的库存
+	c.JSON(200,rsp)
+}
+func Detail(c *gin.Context){
+	id:=c.Param("id")
+	i,err:=strconv.ParseInt(id,10,32)
+	if err!=nil{
+		c.Status(http.StatusNotFound)
+		return
+	}
+	r,err:=global.GoodsSrvClient.GetGoodsDetail(context.Background(),&proto.GoodInfoRequest{
+		Id: int32(i),
+	})
+	if err!=nil{
+		HandleGrpcErrorToHttp(err,c)
+	}
+	rsp := map[string]interface{}{
+		"id":          r.Id,
+		"name":        r.Name,
+		"goods_brief": r.GoodsBrief,
+		"desc":        r.GoodsDesc,
+		"ship_free":   r.ShipFree,
+		"images":      r.Images,
+		"desc_images": r.DescImages,
+		"front_image": r.GoodsFrontImage,
+		"shop_price":  r.ShopPrice,
+		"ctegory": map[string]interface{}{
+			"id":   r.Category.Id,
+			"name": r.Category.Name,
+		},
+		"brand": map[string]interface{}{
+			"id":   r.Brand.Id,
+			"name": r.Brand.Name,
+			"logo": r.Brand.Logo,
+		},
+		"is_hot":  r.IsHot,
+		"is_new":  r.IsNew,
+		"on_sale": r.OnSale,
+	}
+	c.JSON(http.StatusOK, rsp)
+}
+func Delete(ctx *gin.Context)  {
+	id := ctx.Param("id")
+	i, err := strconv.ParseInt(id, 10, 32)
+	if err != nil {
+		ctx.Status(http.StatusNotFound)
+		return
+	}
+	_, err = global.GoodsSrvClient.DeleteGoods(context.Background(), &proto.DeleteGoodsInfo{Id: int32(i)})
+	if err != nil {
+		HandleGrpcErrorToHttp(err, ctx)
+		return
+	}
 
+	ctx.Status(http.StatusOK)
+	return
+}
+
+func Stocks(ctx *gin.Context)  {
+	id := ctx.Param("id")
+	_, err := strconv.ParseInt(id, 10, 32)
+	if err != nil {
+		ctx.Status(http.StatusNotFound)
+		return
+	}
+
+	//TODO 商品的库存
+	return
+}
+
+func UpdateStatus(ctx *gin.Context)  {
+	goodsStatusForm := forms.GoodsStatusForm{}
+	if err := ctx.ShouldBindJSON(&goodsStatusForm); err != nil {
+		HandleVaildatorError(ctx, err)
+		return
+	}
+
+	id := ctx.Param("id")
+	i, err := strconv.ParseInt(id, 10, 32)
+	if _, err = global.GoodsSrvClient.UpdateGoods(context.Background(), &proto.CreateGoodsInfo{
+		Id: int32(i),
+		IsHot: *goodsStatusForm.IsHot,
+		IsNew: *goodsStatusForm.IsNew,
+		OnSale: *goodsStatusForm.OnSale,
+	});err != nil {
+		HandleGrpcErrorToHttp(err, ctx)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg": "修改成功",
+	})
+}
+
+func Update(ctx *gin.Context){
+	goodsForm := forms.GoodsForm{}
+	if err := ctx.ShouldBindJSON(&goodsForm); err != nil {
+		HandleVaildatorError(ctx, err)
+		return
+	}
+
+	id := ctx.Param("id")
+	i, err := strconv.ParseInt(id, 10, 32)
+	if _, err = global.GoodsSrvClient.UpdateGoods(context.Background(), &proto.CreateGoodsInfo{
+		Id: int32(i),
+		Name:            goodsForm.Name,
+		GoodsSn:         goodsForm.GoodsSn,
+		Stocks:          goodsForm.Stocks,
+		MarketPrice:     goodsForm.MarketPrice,
+		ShopPrice:       goodsForm.ShopPrice,
+		GoodsBrief:      goodsForm.GoodsBrief,
+		ShipFree:        *goodsForm.ShipFree,
+		Images:          goodsForm.Images,
+		DescImages:      goodsForm.DescImages,
+		GoodsFrontImage: goodsForm.FrontImage,
+		CategoryId:      goodsForm.CategoryId,
+		BrandId:         goodsForm.Brand,
+	});err != nil {
+		HandleGrpcErrorToHttp(err, ctx)
+		return
+	}
+	ctx.JSON(http.StatusOK, gin.H{
+		"msg": "更新成功",
+	})
+}
