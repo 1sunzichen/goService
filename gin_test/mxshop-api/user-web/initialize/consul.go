@@ -7,7 +7,8 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"gopro/gin_test/mxshop-api/user-web/global"
-	"gopro/gin_test/mxshop_srv/proto"
+	"gopro/gin_test/mxshop-api/user-web/proto"
+
 	//"gopro/gin_test/mxshop-api/user-web/proto"
 )
 func InitSrvConn(){
@@ -20,6 +21,7 @@ func InitSrvConn(){
 		if err!=nil{
 			zap.S().Fatal("【initsrvconn】用户服务链接失败")
 		}
+		fmt.Println(userConn,consulInfo.Host,consulInfo.Port, userInfo.Name,"**************")
 		userSrvClient:=proto.NewUserClient(userConn)
 
 		global.UserSrvClient=userSrvClient

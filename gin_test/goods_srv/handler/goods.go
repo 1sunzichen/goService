@@ -6,9 +6,10 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
+	"gopro/gin_test/goods_srv/global"
 	"gopro/gin_test/goods_srv/model"
 	"gopro/gin_test/goods_srv/proto"
-	"gopro/gin_test/mxshop_srv/global"
+
 )
 
 

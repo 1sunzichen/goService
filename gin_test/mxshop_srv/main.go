@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/health"
-	"google.golang.org/grpc/health/grpc_health_v1"
 	"gopro/gin_test/mxshop_srv/global"
 	"gopro/gin_test/mxshop_srv/handler"
 	"gopro/gin_test/mxshop_srv/initialize"
@@ -42,7 +40,7 @@ func main(){
 		panic("failed to listen:"+err.Error())
 	}
 	//注册服务健康检查
-	grpc_health_v1.RegisterHealthServer(server,health.NewServer())
+	//grpc_health_v1.RegisterHealthServer(server,health.NewServer())
 	//err=server.Serve(lis)
 	//if err!=nil{
 	//	panic("启动grpc失败"+err.Error())

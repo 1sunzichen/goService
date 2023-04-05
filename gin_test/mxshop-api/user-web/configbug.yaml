@@ -1,8 +1,6 @@
 name: zichen
 port: 8022
 user_srv:
-  host: '192.168.3.21'
-  port: 50051
   name: 'user_srv'
 jwt:
   key: 'O7ZA7RE!=be7'
@@ -11,9 +9,9 @@ sms:
   secrect: 'W278E8lwasu1IrK0iZSKPlTKAnuHTe'
   expire: 900
 redis:
-  host: '192.168.3.21'
+  host: '127.0.0.1'
   port: 6379
 consul:
 
-  host: '192.168.3.21'
+  host: '127.0.0.1'
   port: 8500

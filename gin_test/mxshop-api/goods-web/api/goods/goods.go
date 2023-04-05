@@ -144,9 +144,39 @@ func List(c *gin.Context)  {
 		HandleGrpcErrorToHttp(err,c)
 		return
 	}
+	goodsList:=make([]interface{},0)
+
+
+
+	for _,value:=range rsp.Data{
+		goodsList = append(goodsList, map[string]interface{}{
+		"id": value.Id,
+		"name":        value.Name,
+		"goods_brief": value.GoodsBrief,
+		"desc":        value.GoodsDesc,
+		"ship_free":   value.ShipFree,
+		"images":      value.Images,
+		"desc_images": value.DescImages,
+		"front_image": value.GoodsFrontImage,
+		"shop_price":  value.ShopPrice,
+		"ctegory": map[string]interface{}{
+			"id":   value.Category.Id,
+			"name": value.Category.Name,
+		},
+		"brand": map[string]interface{}{
+			"id":   value.Brand.Id,
+			"name": value.Brand.Name,
+			"logo": value.Brand.Logo,
+		},
+		"is_hot":  value.IsHot,
+		"is_new":  value.IsNew,
+		"on_sale": value.OnSale,
+	})
+	}
+
 	c.JSON(200,map[string]interface{}{
 		"total":rsp.Total,
-		"data":rsp.Data,
+		"data":goodsList,
 	})
 
 
