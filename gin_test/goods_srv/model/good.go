@@ -3,14 +3,14 @@ package model
 // 类型,这个字段是否能为null 分类表结构
 type Category struct{
 	BaseModel
-	Name string `gorm:"type:varchar(20);not null"`
-	ParentCatgoryID int32
+	Name string `gorm:"type:varchar(20);not null" json:"name"`
+	ParentCategoryID int32 `json:"parent"`
 	//指向自己 指针
-	ParentCatgory *Category
+	ParentCategory *Category `json:"-"`
 	//外健 ParentCatgoryID 指向那一列 ID
-	SubCategory []*Category `gorm:"foreignKey:ParentCatgoryID;references:ID"`
-	Level int32 `gorm:"type:int;not null;default:1"`
-	IsTab bool `gorm:"default:false;not null"`
+	SubCategory []*Category `gorm:"foreignKey:ParentCategoryID;references:ID" json:"sub_category"`
+	Level int32 `gorm:"type:int;not null;default:1" json:"level"`
+	IsTab bool `gorm:"default:false;not null" json:"is_tab"`
 }
 
 type Brands struct{

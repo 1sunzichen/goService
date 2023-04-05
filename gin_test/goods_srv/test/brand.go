@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/golang/protobuf/ptypes/empty"
 	"google.golang.org/grpc"
 	"gopro/gin_test/goods_srv/proto"
 )
@@ -48,5 +49,27 @@ func main(){
 	//TestGetList()
 	//conn.Close()
 	//TestCreate()
-	TestGetListCate()
+	//TestGetListCate()
+	//TestGetCateGory()
+	TestGetSubCateGory()
+}
+func TestGetSubCateGory(){
+	rsp,err:=Client.GetSubCategory(context.Background(),&proto.CategoryListRequest{
+		Id: 130361,
+	})
+	if err!=nil{
+		panic(err)
+	}
+	fmt.Println(rsp.Total)
+	fmt.Println(rsp)
+}
+func TestGetCateGory(){
+	rsp,err:=Client.GetAllCategorysList(context.Background(),&empty.Empty{
+
+	})
+	if err!=nil{
+		panic(err)
+	}
+	fmt.Println(rsp.Total)
+	fmt.Println(rsp.JsonData)
 }
