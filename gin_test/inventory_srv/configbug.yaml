@@ -1,0 +1,10 @@
+name: 'inventory_srv'
+mysql:
+  port: 3306
+  host: '127.0.0.1'
+  user: 'root'
+  password: '123456'
+  db: 'zc_shop_inventory_srv'
+consul:
+  host: '127.0.0.1'
+  port: 8500
