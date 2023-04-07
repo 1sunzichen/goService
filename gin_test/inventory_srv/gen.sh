@@ -11,5 +11,5 @@ function genProto {
 }
 
 
-genProto  goods
+genProto  inventory
 #genProto  hello

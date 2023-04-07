@@ -3,15 +3,16 @@ package main
 import (
 	"flag"
 	"fmt"
+	uuid "github.com/satori/go.uuid"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"gopro/gin_test/inventory_srv/global"
-	"gopro/gin_test/inventory_srv/handler"
 	"gopro/gin_test/inventory_srv/initialize"
 	"gopro/gin_test/inventory_srv/proto"
 	"gopro/gin_test/inventory_srv/utils"
+	"gopro/gin_test/inventory_srv/utils/register/consul"
 	"net"
 	"os"
 	"os/signal"
@@ -25,42 +26,42 @@ func main(){
 	initialize.InitLogger()
 	initialize.InitConfig()
 	initialize.InitDB()
-
+	//监听端口号
 	zap.S().Info(global.ServerConfig)
 	flag.Parse()
 	fmt.Printf("ip%s:,port%d:",*IP,*Port)
 	if *Port==0{
 		*Port,_=utils.GetFreePort()
 	}
-	client,serverId:=initialize.InitConsul(*Port)
-	//
 	zap.S().Info("port",Port)
+	//启动服务
 	server:=grpc.NewServer()
-	proto.RegisterGoodsServer(server,&handler.GoodsServer{})
+	proto.RegisterInventoryServer(server,&proto.UnimplementedInventoryServer{})
 	lis,err:=net.Listen("tcp",fmt.Sprintf("%s:%d",*IP,*Port))
-	if err!=nil{
-		panic("failed to listen:"+err.Error())
-	}
-	//注册服务健康检查
-	grpc_health_v1.RegisterHealthServer(server,health.NewServer())
-	//err=server.Serve(lis)
-	//if err!=nil{
-	//	panic("启动grpc失败"+err.Error())
-	//}
-	//接受终止信号
 	go func() {
 		err=server.Serve(lis)
 		if err!=nil{
 			panic("启动grpc失败"+err.Error())
 		}
 	}()
+	// 注册consul服务
+	registerClient :=consul.NewRegister(global.ServerConfig.ConsulInfo.Host,global.ServerConfig.ConsulInfo.Port)
+	serviceId:=fmt.Sprintf("%s",uuid.NewV4())
+	err=registerClient.Register("127.0.0.1",*Port,global.ServerConfig.Name,[]string{"service服务","库存服务"},serviceId)
+
+	if err!=nil{
+		panic("failed to listen:"+err.Error())
+	}
+	//注册服务健康检查
+	grpc_health_v1.RegisterHealthServer(server,health.NewServer())
+
+	//接受终止信号
 	quit:=make(chan os.Signal)
 	signal.Notify(quit,syscall.SIGINT,syscall.SIGTERM)
 	<-quit
-	if err=client.Agent().ServiceDeregister(serverId);err!=nil{
-		zap.S().Info("注销失败")
+	if err=registerClient.DeRegister(serviceId);err!=nil{
+		zap.S().Info("服务发现注销inventory_srv失败")
+	}else{
+		zap.S().Info("服务发现注销inventory_srv成功")
 	}
-	zap.S().Info("注销成功")
-
-
 }
