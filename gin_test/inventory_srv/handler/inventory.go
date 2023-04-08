@@ -3,13 +3,12 @@ package handler
 import (
 	"context"
 	"github.com/golang/protobuf/ptypes/empty"
+	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gopro/gin_test/inventory_srv/global"
 	"gopro/gin_test/inventory_srv/model"
 	"gopro/gin_test/inventory_srv/proto"
-	"gorm.io/gorm/clause"
-
 	"sync"
 )
 
@@ -42,17 +41,28 @@ func (I *InventoryServer)Sell(ctx context.Context,req *proto.SellInfo)(*empty.Em
 	tx:=global.DB.Begin()
 	for _,goodinfo:=range req.GoodsInfo{
 		var inv model.Inventory
-		if result :=tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where(&model.Inventory{Goods: goodinfo.GoodsId}).First(&inv);result.RowsAffected==0{
-			tx.Rollback()
-			return nil,status.Errorf(codes.InvalidArgument,"没有库存信息")
+		for {
+			//if result :=tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where(&model.Inventory{Goods: goodinfo.GoodsId}).First(&inv);result.RowsAffected==0{
+			if result := global.DB.Where(&model.Inventory{Goods: goodinfo.GoodsId}).First(&inv); result.RowsAffected == 0 {
+				tx.Rollback()
+				return nil, status.Errorf(codes.InvalidArgument, "没有库存信息")
+			}
+			if inv.Stocks < goodinfo.Num {
+				tx.Rollback()
+				return nil, status.Errorf(codes.ResourceExhausted, "库存不足")
+			}
+			//扣减 会出现数据不一致的情况 -锁 分布式锁
+			inv.Stocks -= goodinfo.Num
+			//tx.Save(&inv) //gorm 出现零值的情况
+			if result := tx.Model(&model.Inventory{}).Select("Stocks","Version").Where("goods = ? and version = ?", goodinfo.GoodsId, inv.Version).Updates(model.Inventory{
+				Version: inv.Version + 1,
+				Stocks:  inv.Stocks,
+			}); result.RowsAffected == 0 {
+				zap.S().Info("库存扣减失败")
+			} else {
+				break
+			}
 		}
-		if inv.Stocks<goodinfo.Num{
-			tx.Rollback()
-			return nil,status.Errorf(codes.ResourceExhausted,"库存不足")
-		}
-		//扣减 会出现数据不一致的情况 -锁 分布式锁
-		inv.Stocks-=goodinfo.Num
-		tx.Save(&inv)
 	}
 	tx.Commit()
 	return &empty.Empty{},nil
@@ -63,19 +73,35 @@ func (I *InventoryServer)ReBack(ctx context.Context,req *proto.SellInfo)(*empty.
 	//
 	tx:=global.DB.Begin()
 	//m.Lock()
+
+
+
 	for _,goodinfo:=range req.GoodsInfo{
 		var inv model.Inventory
 		//if result :=global.DB.Where(&model.Inventory{Goods: goodinfo.GoodsId}).First(&inv);result.RowsAffected==0{
-		//加入forupdate 锁
-		if result :=tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where(&model.Inventory{Goods: goodinfo.GoodsId}).First(&inv);result.RowsAffected==0{
+		//加入forupdate //乐观锁
+		for {
+		//if result :=tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where(&model.Inventory{Goods: goodinfo.GoodsId}).First(&inv);result.RowsAffected==0{
+		if result :=global.DB.Where(&model.Inventory{Goods: goodinfo.GoodsId}).First(&inv);result.RowsAffected==0{
 			tx.Rollback()
 			return nil,status.Errorf(codes.InvalidArgument,"没有库存信息")
 		}
 
 		//扣减
 		inv.Stocks+=goodinfo.Num
-		tx.Save(&inv)
+
+			if result:=tx.Model(&model.Inventory{}).Where("goods = ? and version = ?",goodinfo.GoodsId,inv.Version).Updates(model.Inventory{
+				Version:inv.Version+1,
+				Stocks: inv.Stocks,
+			});result.RowsAffected==0{
+				zap.S().Info("库存扣减失败")
+			}else{
+				break
+			}
+		//tx.Save(&inv)
+		}
 	}
+
 	tx.Commit()
 	//m.Unlock()
 	return &empty.Empty{},nil
