@@ -6,9 +6,8 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/health"
-	"google.golang.org/grpc/health/grpc_health_v1"
 	"gopro/gin_test/inventory_srv/global"
+	"gopro/gin_test/inventory_srv/handler"
 	"gopro/gin_test/inventory_srv/initialize"
 	"gopro/gin_test/inventory_srv/proto"
 	"gopro/gin_test/inventory_srv/utils"
@@ -21,7 +20,7 @@ import (
 
 func main(){
 	IP:=flag.String("ip","0.0.0.0","ip地址")
-	Port:=flag.Int("port",0,"端口号")
+	Port:=flag.Int("port",50051,"端口号")
 	//初始化
 	initialize.InitLogger()
 	initialize.InitConfig()
@@ -36,7 +35,7 @@ func main(){
 	zap.S().Info("port",Port)
 	//启动服务
 	server:=grpc.NewServer()
-	proto.RegisterInventoryServer(server,&proto.UnimplementedInventoryServer{})
+	proto.RegisterInventoryServer(server,&handler.InventoryServer{})
 	lis,err:=net.Listen("tcp",fmt.Sprintf("%s:%d",*IP,*Port))
 	go func() {
 		err=server.Serve(lis)
@@ -53,7 +52,7 @@ func main(){
 		panic("failed to listen:"+err.Error())
 	}
 	//注册服务健康检查
-	grpc_health_v1.RegisterHealthServer(server,health.NewServer())
+	//grpc_health_v1.RegisterHealthServer(server,health.NewServer())
 
 	//接受终止信号
 	quit:=make(chan os.Signal)

@@ -8,23 +8,26 @@ import (
 	"gopro/gin_test/inventory_srv/global"
 	"gopro/gin_test/inventory_srv/model"
 	"gopro/gin_test/inventory_srv/proto"
+	"gorm.io/gorm/clause"
+
+	"sync"
 )
 
-type Inventory struct{
+type InventoryServer struct{
 	proto.UnimplementedInventoryServer
 }
-func (I *Inventory)SetInv(ctx context.Context,req *proto.GoodsInvInfo)(*empty.Empty,error){
+func (I *InventoryServer)SetInv(ctx context.Context,req *proto.GoodsInvInfo)(*empty.Empty,error){
 	//设置库存 更新库存
 	var inv model.Inventory
-	global.DB.First(&inv,req.GoodsId)
+	global.DB.Where(&model.Inventory{Goods: req.GoodsId}).First(&inv)
 	inv.Goods=req.GoodsId
 	inv.Stocks=req.Num
 	global.DB.Save(&inv)
 	return &empty.Empty{},nil
 }
-func (I *Inventory)InvDetail(ctx context.Context,req *proto.GoodsInvInfo)(*proto.GoodsInvInfo,error){
+func (I *InventoryServer)InvDetail(ctx context.Context,req *proto.GoodsInvInfo)(*proto.GoodsInvInfo,error){
 	var inv model.Inventory
-	if res:=global.DB.First(&inv,req.GoodsId);res.RowsAffected==0{
+	if res:=global.DB.Where(&model.Inventory{Goods: req.GoodsId}).First(&inv);res.RowsAffected==0{
 		return nil,status.Errorf(codes.NotFound,"没有库存信息")
 	}
 	return &proto.GoodsInvInfo{
@@ -32,14 +35,14 @@ func (I *Inventory)InvDetail(ctx context.Context,req *proto.GoodsInvInfo)(*proto
 		Num: inv.Stocks,
 	},nil
 }
-
-func (I *Inventory)Sell(ctx context.Context,req *proto.SellInfo)(*empty.Empty,error){
+var m sync.Mutex // 互斥锁
+func (I *InventoryServer)Sell(ctx context.Context,req *proto.SellInfo)(*empty.Empty,error){
 	//数据库事务
 	//并发情况下 可能会出现超卖
 	tx:=global.DB.Begin()
 	for _,goodinfo:=range req.GoodsInfo{
 		var inv model.Inventory
-		if result :=global.DB.First(&inv,goodinfo.GoodsId);result.RowsAffected==0{
+		if result :=tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where(&model.Inventory{Goods: goodinfo.GoodsId}).First(&inv);result.RowsAffected==0{
 			tx.Rollback()
 			return nil,status.Errorf(codes.InvalidArgument,"没有库存信息")
 		}
@@ -47,13 +50,33 @@ func (I *Inventory)Sell(ctx context.Context,req *proto.SellInfo)(*empty.Empty,er
 			tx.Rollback()
 			return nil,status.Errorf(codes.ResourceExhausted,"库存不足")
 		}
-		//扣减
+		//扣减 会出现数据不一致的情况 -锁 分布式锁
 		inv.Stocks-=goodinfo.Num
 		tx.Save(&inv)
 	}
 	tx.Commit()
 	return &empty.Empty{},nil
 }
-func (I *Inventory)ReBack(ctx context.Context,req *proto.SellInfo)(*empty.Empty,error){
-	return nil,nil
+
+func (I *InventoryServer)ReBack(ctx context.Context,req *proto.SellInfo)(*empty.Empty,error){
+	//数据库事务
+	//
+	tx:=global.DB.Begin()
+	//m.Lock()
+	for _,goodinfo:=range req.GoodsInfo{
+		var inv model.Inventory
+		//if result :=global.DB.Where(&model.Inventory{Goods: goodinfo.GoodsId}).First(&inv);result.RowsAffected==0{
+		//加入forupdate 锁
+		if result :=tx.Clauses(clause.Locking{Strength: "UPDATE"}).Where(&model.Inventory{Goods: goodinfo.GoodsId}).First(&inv);result.RowsAffected==0{
+			tx.Rollback()
+			return nil,status.Errorf(codes.InvalidArgument,"没有库存信息")
+		}
+
+		//扣减
+		inv.Stocks+=goodinfo.Num
+		tx.Save(&inv)
+	}
+	tx.Commit()
+	//m.Unlock()
+	return &empty.Empty{},nil
 }
