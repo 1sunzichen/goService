@@ -1,0 +1,16 @@
+name: order-web
+port: 8022
+goods_srv:
+  name: 'goods_srv'
+jwt:
+  key: 'O7ZA7RE!=be7'
+sms:
+  key: 'LTAI5tA8amT2P5TiYB73XTos'
+  secrect: 'W278E8lwasu1IrK0iZSKPlTKAnuHTe'
+  expire: 900
+redis:
+  host: '192.168.3.21'
+  port: 6379
+consul:
+  host: '192.168.3.21'
+  port: 8500
