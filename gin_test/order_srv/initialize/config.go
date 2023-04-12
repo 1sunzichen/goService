@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	viper "github.com/spf13/viper"
-	"gopro/gin_test/inventory_srv/global"
+	"gopro/gin_test/order_srv/global"
 
 	//"time"
 )
@@ -22,11 +22,11 @@ func GetEnvInfo(env string)bool{
 func InitConfig(){
 	debug:=GetEnvInfo("MXSHOP_DEBUG")
 	configPrefix:="config"
-	configName:=fmt.Sprintf("gin_test/inventory_srv/%spro.yaml",configPrefix)
+	configName:=fmt.Sprintf("gin_test/order_srv/%spro.yaml",configPrefix)
 	v:=viper.New()
 	//文件路径如何设置
 	if debug{
-		configName=fmt.Sprintf("gin_test/inventory_srv/%sbug.yaml",configPrefix)
+		configName=fmt.Sprintf("gin_test/order_srv/%sbug.yaml",configPrefix)
 	}
 
 	v.SetConfigFile(configName)

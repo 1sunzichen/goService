@@ -75,6 +75,16 @@ func main(){
 	quit:=make(chan os.Signal)
 	signal.Notify(quit,syscall.SIGINT,syscall.SIGTERM)
 	<-quit
+	servicesId:=[]string{
+		//"00c7325a-9818-48a8-9935-c30ecd7b12af",
+	}
+	for _,s:=range servicesId {
+		if err = registerClient.DeRegister(s); err != nil {
+			zap.S().Info("服务发现注销失败")
+		} else {
+			zap.S().Info("服务发现注销成功")
+		}
+	}
 	if err=registerClient.DeRegister(serviceId);err!=nil{
 		zap.S().Info("服务发现注销order-web失败")
 	}else{

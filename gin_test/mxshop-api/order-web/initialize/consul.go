@@ -14,6 +14,7 @@ func InitSrvConn(){
 	 	consulInfo:=global.ServerConfig.ConsulInfo
 	 	userInfo:=global.ServerConfig.GoodsSrvInfo
 	 	orderInfo:=global.ServerConfig.OrderSrvInfo
+	 	inventoryInfo:=global.ServerConfig.InventorySrvInfo
 		userConn,err:=grpc.Dial(
 			fmt.Sprintf("consul://%s:%d/%s?wait=14s",consulInfo.Host,consulInfo.Port, userInfo.Name),
 		grpc.WithInsecure(),grpc.WithDefaultServiceConfig(
@@ -32,4 +33,14 @@ func InitSrvConn(){
 		}
 		OrderClient:=proto.NewOrderClient(orderConn)
 		global.OrderClient=OrderClient
+		//库存服务
+		inventoryConn,err:=grpc.Dial(
+			fmt.Sprintf("consul://%s:%d/%s?wait=14s",consulInfo.Host,consulInfo.Port, inventoryInfo.Name),
+			grpc.WithInsecure(),grpc.WithDefaultServiceConfig(
+				`{"loadBalaningPolicy":"round_robin"}`))
+		if err!=nil{
+			zap.S().Fatal("【initsrvconn】用户服务链接失败")
+		}
+		InventoryClient:=proto.NewInventoryClient(inventoryConn)
+		global.InventoryClient=InventoryClient
 }

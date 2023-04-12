@@ -9,7 +9,7 @@ import (
 func Routers() *gin.Engine{
 	Router:=gin.Default()
 	Router.Use(middlewares.Cors())
-	Apigroup:=Router.Group("/g/v1")
+	Apigroup:=Router.Group("/o/v1")
 
 	router.InitRouter(Apigroup)
 	router.InitShopCartRouter(Apigroup)

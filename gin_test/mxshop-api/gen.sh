@@ -10,6 +10,6 @@ function genProto {
 
 }
 
-genProto order-web goods
+genProto order-web order
 #genProto user-web user
 #genProto  hello

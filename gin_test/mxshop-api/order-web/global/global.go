@@ -13,6 +13,7 @@ var (
 	}
 	OrderClient proto.OrderClient
 	GoodsClient proto.GoodsClient
+	InventoryClient proto.InventoryClient
 )
 
 var MobileValidator="mobile_validator"

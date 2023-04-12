@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/hashicorp/consul/api"
 	"github.com/satori/go.uuid"
-	"gopro/gin_test/inventory_srv/global"
+	"gopro/gin_test/order_srv/global"
 )
 
 func InitConsul(port int)(*api.Client,string){

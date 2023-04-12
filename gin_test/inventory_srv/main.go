@@ -20,11 +20,13 @@ import (
 
 func main(){
 	IP:=flag.String("ip","0.0.0.0","ip地址")
-	Port:=flag.Int("port",50051,"端口号")
+	Port:=flag.Int("port",50053,"端口号")
 	//初始化
 	initialize.InitLogger()
 	initialize.InitConfig()
 	initialize.InitDB()
+	//链接redis分布式锁
+
 	//监听端口号
 	zap.S().Info(global.ServerConfig)
 	flag.Parse()

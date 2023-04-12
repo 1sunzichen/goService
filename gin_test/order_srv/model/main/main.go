@@ -4,8 +4,8 @@ import (
 	//"crypto/sha512"
 	//"fmt"
 	//"github.com/anaskhan96/go-password-encoder"
-	"gopro/gin_test/inventory_srv/model"
-	//"gopro/gin_test/inventory_srv/models"
+	"gopro/gin_test/order_srv/model"
+	//"gopro/gin_test/order_srv/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -28,7 +28,7 @@ func main() {
 		},
 	)
 
-	db, err := gorm.Open(mysql.Open("root:123456@tcp(127.0.0.1:3306)/zc_shop_inventory_srv?charset=utf8mb4&parseTime=True&loc=Local"),
+	db, err := gorm.Open(mysql.Open("root:123456@tcp(127.0.0.1:3306)/zc_shop_order_srv?charset=utf8mb4&parseTime=True&loc=Local"),
 		&gorm.Config{
 		Logger: newLogger,
 		NamingStrategy: schema.NamingStrategy{
@@ -38,7 +38,7 @@ func main() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	_=db.AutoMigrate(&model.Inventory{})
+	_=db.AutoMigrate(&model.OrderGoods{},&model.ShoppingCart{},&model.OrderInfo{})
 
 	//options:=&password.Options{16,100,32,sha512.New}
 	//salt,encodedPwd:=password.Encode("admin123",options)

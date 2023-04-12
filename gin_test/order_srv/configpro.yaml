@@ -3,4 +3,13 @@ mysql:
   host: '127.0.0.1'
   user: 'root'
   password: '123456'
-  db: 'zc_shop_inventory_srv'
+  db: 'zc_shop_order_srv'
+consul:
+  host: '127.0.0.1'
+  port: 8500
+order_srv:
+  name: "order-srv"
+inventory_srv:
+  name: "inventory-srv"
+goods_srv:
+  name: "goods-srv"

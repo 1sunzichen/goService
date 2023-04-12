@@ -2,7 +2,7 @@ package initialize
 
 import (
 	"fmt"
-	"gopro/gin_test/inventory_srv/global"
+	"gopro/gin_test/order_srv/global"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -24,7 +24,7 @@ func InitDB(){
 	)
 	var err error
 	fmt.Println(global.ServerConfig.MysqlInfo.Port,"global.ServerConfig")
-	global.DB, err = gorm.Open(mysql.Open("root:123456@tcp(127.0.0.1:3306)/zc_shop_inventory_srv?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{
+	global.DB, err = gorm.Open(mysql.Open("root:123456@tcp(127.0.0.1:3306)/zc_shop_order_srv?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{
 		Logger: newLogger,
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,

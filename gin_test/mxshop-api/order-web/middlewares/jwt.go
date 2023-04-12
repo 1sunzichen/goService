@@ -43,6 +43,7 @@ func JWTAuth() gin.HandlerFunc {
 		}
 		c.Set("claims", claims)
 		c.Set("userId", claims.ID)
+		fmt.Println(claims.ID,"userId")
 		c.Next()
 	}
 }
@@ -90,7 +91,9 @@ func (j *JWT) ParseToken(tokenString string) (*models.CustomClaims, error) {
 		}
 	}
 	if token != nil {
+
 		if claims, ok := token.Claims.(*models.CustomClaims); ok && token.Valid {
+
 			return claims, nil
 		}
 		return nil, TokenInvalid

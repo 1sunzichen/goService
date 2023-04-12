@@ -9,7 +9,6 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/hashicorp/consul/api"
 	"go.uber.org/zap"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gopro/gin_test/mxshop-api/user-web/forms"
@@ -168,15 +167,8 @@ func PasswordLogin(c *gin.Context){
 		})
 		return
 	}
-	userConn,err:=grpc.Dial(fmt.Sprintf("%s:%d",global.ServerConfig.UserSrvInfo.Host,global.ServerConfig.UserSrvInfo.Port ),grpc.WithInsecure())
-	if err!=nil{
-		zap.S().Errorw("[getuserlist] 链接【用户服务失败】",
-			"msg",err.Error())
-	}
-	fmt.Println(global.ServerConfig.UserSrvInfo.Host,global.ServerConfig.UserSrvInfo.Port )
-	//生成grpc的client并调用接口
-	userSrvClient:=proto.NewUserClient(userConn)
-	if rsp,err:=userSrvClient.GetUserMobile(context.Background(),&proto.MobileReq{
+
+	if rsp,err:=global.UserSrvClient.GetUserMobile(context.Background(),&proto.MobileReq{
 		Mobile: passwordLoginForm.Mobile,
 	});err!=nil{
 		if e,ok:=status.FromError(err); ok {
@@ -195,7 +187,7 @@ func PasswordLogin(c *gin.Context){
 	  }
 	}else{
 		//查询了用户，没有检查密码 校验与数据库的密码是否一致 rsp.PassWord 数据库的密码
-		if passRsp,passErr:=userSrvClient.CheckPassWord(context.Background(),&proto.PassWordInfo{
+		if passRsp,passErr:=global.UserSrvClient.CheckPassWord(context.Background(),&proto.PassWordInfo{
 			PassWord: passwordLoginForm.PassWord,
 			EncryptedPassword: rsp.PassWord,
 		});passErr!=nil{
@@ -294,7 +286,8 @@ func Register(c *gin.Context){
 		AuthorityId:    uint(user.Role),
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix(), //签名的生效时间
-			ExpiresAt: time.Now().Unix() + 60*60*24*30, //30天过期
+			ExpiresAt: time.Now().Unix() + 60*60*24*30000, //30天过期
+			//jwt.io  解析密钥 imooc
 			Issuer: "imooc",
 		},
 	}

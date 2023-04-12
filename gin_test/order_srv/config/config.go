@@ -1,4 +1,8 @@
 package config
+type GoodsSrvConfig struct{
+	Name string `mapstructure:"name" json:"name"`
+}
+
 type MysqlConfig struct{
 	Host string `mapstructure:"host" json:"host"`
 	Port int  `mapstructure:"port" json:"port"`
@@ -26,5 +30,7 @@ type ServerConfig struct {
 	//RedisInfo   RedisConfig   `mapstructure:"redis" json:"redis"`
 	ConsulInfo  ConsulConfig  `mapstructure:"consul" json:"consul"`
 	MysqlInfo MysqlConfig `mapstructure:"mysql" json:"mysql"`
+	GoodsSrvConfig GoodsSrvConfig `mapstructure:"goods_srv" json:"goods_srv"`
+	InventoryConfig GoodsSrvConfig `mapstructure:"inventory_srv" json:"inventory_srv"`
 
 }
