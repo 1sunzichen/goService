@@ -1,0 +1,132 @@
+2023-04-13T00:19:40.915+0800	DEBUG	rpc/rpc_client.go:292	config-0-14628c17-6958-420a-9604-5234dedc7e37 register server push request:ConfigChangeNotifyRequest handler:ConfigChangeNotifyRequestHandler
+2023-04-13T00:19:40.917+0800	DEBUG	rpc/rpc_client.go:292	config-0-14628c17-6958-420a-9604-5234dedc7e37 register server push request:ConnectResetRequest handler:ConnectResetRequestHandler
+2023-04-13T00:19:40.917+0800	DEBUG	rpc/rpc_client.go:292	config-0-14628c17-6958-420a-9604-5234dedc7e37 register server push request:ClientDetectionRequest handler:ClientDetectionRequestHandler
+2023-04-13T00:19:40.917+0800	INFO	rpc/rpc_client.go:224	[RpcClient.Start] config-0-14628c17-6958-420a-9604-5234dedc7e37 try to connect to server on start up, server: {serverIp:192.168.3.21 serverPort:8848 serverGrpcPort:9848}
+2023-04-13T00:19:40.918+0800	INFO	util/common.go:96	Local IP:192.168.3.21
+2023-04-13T00:19:40.920+0800	WARN	rpc/rpc_client.go:226	[RpcClient.Start] config-0-14628c17-6958-420a-9604-5234dedc7e37 fail to connect to server on start up, error message=server check request failed , err:rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 192.168.3.21:9848: connect: connection refused", start up retry times left=2
+2023-04-13T00:19:40.920+0800	INFO	rpc/rpc_client.go:224	[RpcClient.Start] config-0-14628c17-6958-420a-9604-5234dedc7e37 try to connect to server on start up, server: {serverIp:192.168.3.21 serverPort:8848 serverGrpcPort:9848}
+2023-04-13T00:19:40.921+0800	WARN	rpc/rpc_client.go:226	[RpcClient.Start] config-0-14628c17-6958-420a-9604-5234dedc7e37 fail to connect to server on start up, error message=server check request failed , err:rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 192.168.3.21:9848: connect: connection refused", start up retry times left=1
+2023-04-13T00:19:40.921+0800	INFO	rpc/rpc_client.go:224	[RpcClient.Start] config-0-14628c17-6958-420a-9604-5234dedc7e37 try to connect to server on start up, server: {serverIp:192.168.3.21 serverPort:8848 serverGrpcPort:9848}
+2023-04-13T00:19:40.923+0800	WARN	rpc/rpc_client.go:226	[RpcClient.Start] config-0-14628c17-6958-420a-9604-5234dedc7e37 fail to connect to server on start up, error message=server check request failed , err:rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 192.168.3.21:9848: connect: connection refused", start up retry times left=0
+2023-04-13T00:19:40.923+0800	INFO	rpc/rpc_client.go:324	config-0-14628c17-6958-420a-9604-5234dedc7e37 try to re connect to a new server, server is not appointed, will choose a random server.
+2023-04-13T00:19:40.924+0800	ERROR	rpc/rpc_client.go:524	Send request fail, request=ConfigQueryRequest, body={"requestId":"","group":"DEFAULT_GROUP","dataId":"user-web.yaml","tenant":"9529f44a-dd4a-4242-817e-d35f3a726128","module":"config","tag":""}, retryTimes=0, error=client not connected, current status:STARTING
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Request
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/common/remote/rpc/rpc_client.go:489
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).requestProxy
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:64
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).queryConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:116
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).getConfigInner
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:205
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).GetConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:149
+main.main
+	/Users/iss/goPro/GObasicNo_3/nacos_test/main.go:30
+runtime.main
+	/usr/local/go/src/runtime/proc.go:255
+runtime.goexit
+	/usr/local/go/src/runtime/asm_amd64.s:1581
+2023-04-13T00:19:40.926+0800	WARN	rpc/rpc_client.go:355	config-0-14628c17-6958-420a-9604-5234dedc7e37 fail to connect server, after trying 1 times, last try server is {serverIp:192.168.3.21 serverPort:8848 serverGrpcPort:9848}, error=server check request failed , err:rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 192.168.3.21:9848: connect: connection refused"
+2023-04-13T00:19:41.024+0800	ERROR	rpc/rpc_client.go:524	Send request fail, request=ConfigQueryRequest, body={"requestId":"","group":"DEFAULT_GROUP","dataId":"user-web.yaml","tenant":"9529f44a-dd4a-4242-817e-d35f3a726128","module":"config","tag":""}, retryTimes=1, error=client not connected, current status:STARTING
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Request
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/common/remote/rpc/rpc_client.go:489
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).requestProxy
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:64
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).queryConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:116
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).getConfigInner
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:205
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).GetConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:149
+main.main
+	/Users/iss/goPro/GObasicNo_3/nacos_test/main.go:30
+runtime.main
+	/usr/local/go/src/runtime/proc.go:255
+runtime.goexit
+	/usr/local/go/src/runtime/asm_amd64.s:1581
+2023-04-13T00:19:41.031+0800	WARN	rpc/rpc_client.go:355	config-0-14628c17-6958-420a-9604-5234dedc7e37 fail to connect server, after trying 2 times, last try server is {serverIp:192.168.3.21 serverPort:8848 serverGrpcPort:9848}, error=server check request failed , err:rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 192.168.3.21:9848: connect: connection refused"
+2023-04-13T00:19:41.125+0800	ERROR	rpc/rpc_client.go:524	Send request fail, request=ConfigQueryRequest, body={"requestId":"","group":"DEFAULT_GROUP","dataId":"user-web.yaml","tenant":"9529f44a-dd4a-4242-817e-d35f3a726128","module":"config","tag":""}, retryTimes=2, error=client not connected, current status:STARTING
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Request
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/common/remote/rpc/rpc_client.go:489
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).requestProxy
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:64
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).queryConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:116
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).getConfigInner
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:205
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).GetConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:149
+main.main
+	/Users/iss/goPro/GObasicNo_3/nacos_test/main.go:30
+runtime.main
+	/usr/local/go/src/runtime/proc.go:255
+runtime.goexit
+	/usr/local/go/src/runtime/asm_amd64.s:1581
+2023-04-13T00:19:41.226+0800	INFO	config_client/config_client.go:208	get config from server error:client not connected, current status:STARTING 
+2023-04-13T00:19:41.226+0800	ERROR	cache/disk_cache.go:101	get config from cache, cacheKey:user-web.yaml@@DEFAULT_GROUP@@9529f44a-dd4a-4242-817e-d35f3a726128, cacheDir:./config, error:open ./config/user-web.yaml@@DEFAULT_GROUP@@9529f44a-dd4a-4242-817e-d35f3a726128: no such file or directory 
+2023-04-13T00:20:01.305+0800	DEBUG	rpc/rpc_client.go:292	config-0-19cb8422-e305-48a3-a796-24463cd62576 register server push request:ConfigChangeNotifyRequest handler:ConfigChangeNotifyRequestHandler
+2023-04-13T00:20:01.306+0800	DEBUG	rpc/rpc_client.go:292	config-0-19cb8422-e305-48a3-a796-24463cd62576 register server push request:ConnectResetRequest handler:ConnectResetRequestHandler
+2023-04-13T00:20:01.306+0800	DEBUG	rpc/rpc_client.go:292	config-0-19cb8422-e305-48a3-a796-24463cd62576 register server push request:ClientDetectionRequest handler:ClientDetectionRequestHandler
+2023-04-13T00:20:01.306+0800	INFO	rpc/rpc_client.go:224	[RpcClient.Start] config-0-19cb8422-e305-48a3-a796-24463cd62576 try to connect to server on start up, server: {serverIp:192.168.3.21 serverPort:8848 serverGrpcPort:9848}
+2023-04-13T00:20:01.308+0800	INFO	util/common.go:96	Local IP:192.168.3.21
+2023-04-13T00:20:01.309+0800	WARN	rpc/rpc_client.go:226	[RpcClient.Start] config-0-19cb8422-e305-48a3-a796-24463cd62576 fail to connect to server on start up, error message=server check request failed , err:rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 192.168.3.21:9848: connect: connection refused", start up retry times left=2
+2023-04-13T00:20:01.309+0800	INFO	rpc/rpc_client.go:224	[RpcClient.Start] config-0-19cb8422-e305-48a3-a796-24463cd62576 try to connect to server on start up, server: {serverIp:192.168.3.21 serverPort:8848 serverGrpcPort:9848}
+2023-04-13T00:20:01.310+0800	WARN	rpc/rpc_client.go:226	[RpcClient.Start] config-0-19cb8422-e305-48a3-a796-24463cd62576 fail to connect to server on start up, error message=server check request failed , err:rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 192.168.3.21:9848: connect: connection refused", start up retry times left=1
+2023-04-13T00:20:01.311+0800	INFO	rpc/rpc_client.go:224	[RpcClient.Start] config-0-19cb8422-e305-48a3-a796-24463cd62576 try to connect to server on start up, server: {serverIp:192.168.3.21 serverPort:8848 serverGrpcPort:9848}
+2023-04-13T00:20:01.312+0800	WARN	rpc/rpc_client.go:226	[RpcClient.Start] config-0-19cb8422-e305-48a3-a796-24463cd62576 fail to connect to server on start up, error message=server check request failed , err:rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 192.168.3.21:9848: connect: connection refused", start up retry times left=0
+2023-04-13T00:20:01.313+0800	ERROR	rpc/rpc_client.go:524	Send request fail, request=ConfigQueryRequest, body={"requestId":"","group":"DEFAULT_GROUP","dataId":"user-web.yaml","tenant":"9529f44a-dd4a-4242-817e-d35f3a726128","module":"config","tag":""}, retryTimes=0, error=client not connected, current status:STARTING
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Request
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/common/remote/rpc/rpc_client.go:489
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).requestProxy
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:64
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).queryConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:116
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).getConfigInner
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:205
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).GetConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:149
+main.main
+	/Users/iss/goPro/GObasicNo_3/nacos_test/main.go:30
+runtime.main
+	/usr/local/go/src/runtime/proc.go:255
+runtime.goexit
+	/usr/local/go/src/runtime/asm_amd64.s:1581
+2023-04-13T00:20:01.313+0800	INFO	rpc/rpc_client.go:324	config-0-19cb8422-e305-48a3-a796-24463cd62576 try to re connect to a new server, server is not appointed, will choose a random server.
+2023-04-13T00:20:01.315+0800	WARN	rpc/rpc_client.go:355	config-0-19cb8422-e305-48a3-a796-24463cd62576 fail to connect server, after trying 1 times, last try server is {serverIp:192.168.3.21 serverPort:8848 serverGrpcPort:9848}, error=server check request failed , err:rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 192.168.3.21:9848: connect: connection refused"
+2023-04-13T00:20:01.414+0800	ERROR	rpc/rpc_client.go:524	Send request fail, request=ConfigQueryRequest, body={"requestId":"","group":"DEFAULT_GROUP","dataId":"user-web.yaml","tenant":"9529f44a-dd4a-4242-817e-d35f3a726128","module":"config","tag":""}, retryTimes=1, error=client not connected, current status:STARTING
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Request
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/common/remote/rpc/rpc_client.go:489
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).requestProxy
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:64
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).queryConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:116
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).getConfigInner
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:205
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).GetConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:149
+main.main
+	/Users/iss/goPro/GObasicNo_3/nacos_test/main.go:30
+runtime.main
+	/usr/local/go/src/runtime/proc.go:255
+runtime.goexit
+	/usr/local/go/src/runtime/asm_amd64.s:1581
+2023-04-13T00:20:01.417+0800	WARN	rpc/rpc_client.go:355	config-0-19cb8422-e305-48a3-a796-24463cd62576 fail to connect server, after trying 2 times, last try server is {serverIp:192.168.3.21 serverPort:8848 serverGrpcPort:9848}, error=server check request failed , err:rpc error: code = Unavailable desc = connection error: desc = "transport: Error while dialing: dial tcp 192.168.3.21:9848: connect: connection refused"
+2023-04-13T00:20:01.515+0800	ERROR	rpc/rpc_client.go:524	Send request fail, request=ConfigQueryRequest, body={"requestId":"","group":"DEFAULT_GROUP","dataId":"user-web.yaml","tenant":"9529f44a-dd4a-4242-817e-d35f3a726128","module":"config","tag":""}, retryTimes=2, error=client not connected, current status:STARTING
+github.com/nacos-group/nacos-sdk-go/v2/common/remote/rpc.(*RpcClient).Request
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/common/remote/rpc/rpc_client.go:489
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).requestProxy
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:64
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigProxy).queryConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_proxy.go:116
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).getConfigInner
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:205
+github.com/nacos-group/nacos-sdk-go/v2/clients/config_client.(*ConfigClient).GetConfig
+	/Users/iss/go/pkg/mod/github.com/nacos-group/nacos-sdk-go/v2@v2.2.1/clients/config_client/config_client.go:149
+main.main
+	/Users/iss/goPro/GObasicNo_3/nacos_test/main.go:30
+runtime.main
+	/usr/local/go/src/runtime/proc.go:255
+runtime.goexit
+	/usr/local/go/src/runtime/asm_amd64.s:1581
+2023-04-13T00:20:01.616+0800	INFO	config_client/config_client.go:208	get config from server error:client not connected, current status:STARTING 
+2023-04-13T00:20:01.617+0800	ERROR	cache/disk_cache.go:101	get config from cache, cacheKey:user-web.yaml@@DEFAULT_GROUP@@9529f44a-dd4a-4242-817e-d35f3a726128, cacheDir:.//config, error:open .//config/user-web.yaml@@DEFAULT_GROUP@@9529f44a-dd4a-4242-817e-d35f3a726128: no such file or directory 

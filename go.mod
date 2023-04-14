@@ -20,6 +20,8 @@ require (
 	github.com/hashicorp/consul/api v1.20.0
 	github.com/mbobakov/grpc-consul-resolver v1.5.2
 	github.com/mojocn/base64Captcha v1.3.5
+	github.com/nacos-group/nacos-sdk-go/v2 v2.2.1
+	github.com/olivere/elastic/v7 v7.0.32
 	github.com/onsi/gomega v1.27.5 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/smartwalle/alipay/v3 v3.2.1
