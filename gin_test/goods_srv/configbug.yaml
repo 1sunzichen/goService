@@ -8,3 +8,6 @@ mysql:
 consul:
   host: '127.0.0.1'
   port: 8500
+es:
+  port: 9200
+  host: '127.0.0.1'

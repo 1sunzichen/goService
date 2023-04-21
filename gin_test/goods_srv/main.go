@@ -25,7 +25,9 @@ func main(){
 	initialize.InitLogger()
 	initialize.InitConfig()
 	initialize.InitDB()
-
+	//es
+	initialize.InitEs()
+	//
 	zap.S().Info(global.ServerConfig)
 	flag.Parse()
 	fmt.Printf("ip%s:,port%d:",*IP,*Port)

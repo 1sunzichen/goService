@@ -119,6 +119,7 @@ func List(c *gin.Context)  {
 	request.PagePerNums=int32(pageNumInt)
 
 	keyword:=c.DefaultQuery("q","")
+	fmt.Println(keyword,"keyqord")
 	request.KeyWords=keyword
 
 	brandId:=c.DefaultQuery("b","0")

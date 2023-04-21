@@ -1,5 +1,12 @@
 package model
 
+import (
+	"context"
+	"gopro/gin_test/goods_srv/global"
+	"gorm.io/gorm"
+	"strconv"
+)
+
 // 类型,这个字段是否能为null 分类表结构
 type Category struct{
 	BaseModel
@@ -60,4 +67,87 @@ type Goods struct{
 	Images GormList
 	DescImages GormList
 	GoodsFrontImage string `gorm:"type:varchar(200);not null"`
+}
+func (g *Goods)AfterCreate(tx *gorm.DB)(err error){
+	err=CommonUpdateES(g,"")
+	return err
+}
+func (g *Goods)AfterUpdate(tx *gorm.DB)(err error){
+	err=CommonUpdateES(g,"update")
+	return err
+}
+
+// CreateEsIndex 新增Es gorm 回调
+func CreateEsIndex(esModel EsGoods,g *Goods)error{
+	_,err:=global.EsClient.Index().Index("goods").BodyJson(esModel).Id(strconv.Itoa(int(g.ID))).Do(context.Background())
+	if err != nil {
+		//panic(err)
+		return err
+	}
+	return nil
+}
+
+// UpdateEsIndex 更新Es gorm 回调
+func UpdateEsIndex(esModel EsGoods,g *Goods)error{
+	_,err:=global.EsClient.Update().Index("goods").Doc(esModel).Id(strconv.Itoa(int(g.ID))).Do(context.Background())
+	if err != nil {
+		//panic(err)
+		return err
+	}
+	return nil
+}
+
+// DeleteEsIndex 删除Es gorm 回调
+func DeleteEsIndex(esModel EsGoods,g *Goods)error{
+	_,err:=global.EsClient.Delete().Index("goods").Id(strconv.Itoa(int(g.ID))).Do(context.Background())
+	if err != nil {
+		//panic(err)
+		return err
+	}
+	return nil
+}
+func CommonUpdateES(g *Goods,key string) error {
+
+	esModel := EsGoods{
+		ID:          g.ID,
+		CategoryID:  g.CategoryID,
+		BrandsID:    g.BrandsID,
+		OnSale:      g.OnSale,
+		ShipFree:    g.ShipFree,
+		IsNew:       g.IsNew,
+		IsHot:       g.IsHot,
+		Name:        g.Name,
+		ClickNum:    g.ClickNum,
+		SoldNum:     g.SoldNum,
+		FavNum:      g.FavNum,
+		MarketPrice: g.MarketPrice,
+		GoodsBrief:  g.GoodsBrief,
+		ShopPrice:   g.ShopPrice,
+	}
+	switch key {
+		case "update":
+			err :=UpdateEsIndex(esModel,g)
+			if err != nil {
+				//panic(err)
+				return err
+			}
+
+		case "delete":
+			err :=DeleteEsIndex(esModel,g)
+			if err != nil {
+				//panic(err)
+				return err
+			}
+		default:
+			err :=CreateEsIndex(esModel,g)
+			if err != nil {
+				//panic(err)
+				return err
+			}
+	}
+
+
+	//强调一下 一定要将docker启动es的java_ops的内存设置大一些 否则运行过程中会出现 bad request错误
+
+	return nil
 }

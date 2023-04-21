@@ -1,6 +1,7 @@
 package global
 
 import (
+	"github.com/olivere/elastic/v7"
 	"gopro/gin_test/goods_srv/config"
 	"gorm.io/gorm"
 )
@@ -9,6 +10,7 @@ var (
 	DB *gorm.DB
     err error
 	ServerConfig config.ServerConfig
+	EsClient *elastic.Client
 )
 
 //func init() {

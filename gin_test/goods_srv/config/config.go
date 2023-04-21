@@ -26,5 +26,6 @@ type ServerConfig struct {
 	//RedisInfo   RedisConfig   `mapstructure:"redis" json:"redis"`
 	ConsulInfo  ConsulConfig  `mapstructure:"consul" json:"consul"`
 	MysqlInfo MysqlConfig `mapstructure:"mysql" json:"mysql"`
-
+   	EsInfo	MysqlConfig `mapstructure:"es" json:"es"`
 }
+

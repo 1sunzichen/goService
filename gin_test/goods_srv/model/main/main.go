@@ -1,6 +1,11 @@
 package main
 
 import (
+	"context"
+	"github.com/olivere/elastic/v7"
+	"gopro/gin_test/goods_srv/global"
+	"strconv"
+
 	//"crypto/sha512"
 	//"fmt"
 	//"github.com/anaskhan96/go-password-encoder"
@@ -35,10 +40,46 @@ func main() {
 			SingularTable: true,
 		},
 	})
+	// 全局模式
+
+	host := "http://192.168.155.202:9200"
+	logger := log.New(os.Stdout, "mxshop", log.LstdFlags)
+	global.EsClient, err = elastic.NewClient(elastic.SetURL(host), elastic.SetSniff(false),
+		elastic.SetTraceLog(logger))
 	if err != nil {
-		panic("failed to connect database")
+		panic(err)
 	}
-	_=db.AutoMigrate(&model.Category{},&model.Brands{},&model.GoodsCategoryBrand{},&model.Goods{})
+
+	var goods []model.Goods
+	db.Find(&goods)
+	for _, g := range goods {
+		esModel := model.EsGoods{
+			ID:          g.ID,
+			CategoryID:  g.CategoryID,
+			BrandsID:    g.BrandsID,
+			OnSale:      g.OnSale,
+			ShipFree:    g.ShipFree,
+			IsNew:       g.IsNew,
+			IsHot:       g.IsHot,
+			Name:        g.Name,
+			ClickNum:    g.ClickNum,
+			SoldNum:     g.SoldNum,
+			FavNum:      g.FavNum,
+			MarketPrice: g.MarketPrice,
+			GoodsBrief:  g.GoodsBrief,
+			ShopPrice:   g.ShopPrice,
+		}
+
+		_, err = global.EsClient.Index().Index("goods").BodyJson(esModel).Id(strconv.Itoa(int(g.ID))).Do(context.Background())
+		if err != nil {
+			panic(err)
+		}
+		//强调一下 一定要将docker启动es的java_ops的内存设置大一些 否则运行过程中会出现 bad request错误
+	}
+	//if err != nil {
+	//	panic("failed to connect database")
+	//}
+	//_=db.AutoMigrate(&model.Category{},&model.Brands{},&model.GoodsCategoryBrand{},&model.Goods{})
 
 	//options:=&password.Options{16,100,32,sha512.New}
 	//salt,encodedPwd:=password.Encode("admin123",options)

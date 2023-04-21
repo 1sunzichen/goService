@@ -6,7 +6,9 @@ require (
 	github.com/aliyun/alibaba-cloud-sdk-go v1.62.253
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.7+incompatible
 	github.com/anaskhan96/go-password-encoder v0.0.0-20201010210601-c765b799fd72
+	github.com/apache/rocketmq-client-go/v2 v2.1.1 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.4
 	github.com/gin-gonic/gin v1.8.2
 	github.com/go-playground/locales v0.14.0
@@ -26,10 +28,15 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/smartwalle/alipay/v3 v3.2.1
 	github.com/spf13/viper v1.12.0
+	github.com/tidwall/gjson v1.14.4 // indirect
+	github.com/tidwall/pretty v1.2.1 // indirect
+	go.uber.org/atomic v1.10.0 // indirect
 	go.uber.org/zap v1.24.0
 	golang.org/x/image v0.6.0 // indirect
+	golang.org/x/sys v0.7.0 // indirect
 	google.golang.org/grpc v1.54.0
 	google.golang.org/protobuf v1.30.0
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gorm.io/driver/mysql v1.4.5
 	gorm.io/gorm v1.24.3
 )

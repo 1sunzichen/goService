@@ -11,7 +11,7 @@ import (
 var Client proto.GoodsClient
 var conn *grpc.ClientConn
 func Init(){
-	conn,err:=grpc.Dial("127.0.0.1:50051",grpc.WithInsecure())
+	conn,err:=grpc.Dial("127.0.0.1:50951",grpc.WithInsecure())
 	if err!=nil{
 		panic(err)
 	}
@@ -19,9 +19,7 @@ func Init(){
 	Client=proto.NewGoodsClient(conn)
 }
 func TestGetList(){
-	rsp,err:=Client.BrandList(context.Background(),&proto.BrandFilterRequest{
-
-	})
+	rsp,err:=Client.GoodsList(context.Background(),&proto.GoodsFilterRequest{KeyWords: "国产"})
 	if err!=nil{
 		panic(err)
 	}
@@ -46,12 +44,12 @@ func TestCreate(){
 }
 func main(){
 	Init()
-	//TestGetList()
+	TestGetList()
 	//conn.Close()
 	//TestCreate()
 	//TestGetListCate()
 	//TestGetCateGory()
-	TestGetSubCateGory()
+	//TestGetSubCateGory()
 }
 func TestGetSubCateGory(){
 	rsp,err:=Client.GetSubCategory(context.Background(),&proto.CategoryListRequest{
