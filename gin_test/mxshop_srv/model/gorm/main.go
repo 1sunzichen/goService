@@ -15,12 +15,12 @@ import (
 
 func main() {
 	newLogger := logger.New(
-		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer（日志输出的目标，前缀和日志包含的内容——译者注）
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer (log output target, prefix, and log content -- translator's note)
 		logger.Config{
-			SlowThreshold: time.Second,   // 慢 SQL 阈值
-			LogLevel:      logger.Silent, // 日志级别
-			IgnoreRecordNotFoundError: true,   // 忽略ErrRecordNotFound（记录未找到）错误
-			Colorful:      false,         // 禁用彩色打印
+			SlowThreshold: time.Second,   // Slow SQL threshold
+			LogLevel:      logger.Silent, // Log level
+			IgnoreRecordNotFoundError: true,   // Ignore ErrRecordNotFound error
+			Colorful:      false,         // Disable colorful printing
 		},
 	)
 

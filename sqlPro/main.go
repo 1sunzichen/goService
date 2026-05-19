@@ -27,7 +27,7 @@ type Language struct {
 }
 
 func main() {
-	// 参考 https://github.com/go-sql-driver/mysql#dsn-data-source-name 获取详情
+	// Refer to https://github.com/go-sql-driver/mysql#dsn-data-source-name for details
 	dsn := "root:123456@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local"
 	db, _ := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	db.AutoMigrate(&UserMany{})

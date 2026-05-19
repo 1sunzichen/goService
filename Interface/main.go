@@ -5,7 +5,7 @@ import (
 
 )
 
-//Go 中，接口是一组方法签名。当一个类型为接口中的所有方法提供定义时，就说它实现了接口
+//In Go, an interface is a set of method signatures. When a type provides definitions for all methods in an interface, it is said to implement the interface.
 
 type vower interface{
 	vowerFind()[]rune
@@ -99,11 +99,11 @@ func WorkerFunc(){
 	describe(w)
 	w.Work()
 }
-//空接口  由于空接口有零个方法，所有类型都实现了空接口
+//Empty interface - since the empty interface has zero methods, all types implement the empty interface.
 func describe1(i interface{}) {
 	fmt.Printf("Type = %T, value = %v\n", i, i)
 }
-//类型断言
+//Type assertion
 func assert(i interface{}) {
 	s := i.(int) //get the underlying int value from i
 	fmt.Println(s)
@@ -160,6 +160,6 @@ func main(){
 	//interface1()
 
 	//WorkerFunc()
-	//describeFunc()//空接口
-	assertFunc()//断言
+	//describeFunc()//empty interface
+	assertFunc()//type assertion
 }

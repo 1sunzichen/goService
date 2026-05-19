@@ -24,7 +24,7 @@ func InitConfig(){
 	configPrefix:="config"
 	configName:=fmt.Sprintf("user-web/global/%spro.yaml",configPrefix)
 	var v =viper.New()
-	//文件路径如何设置
+	// configure file path
 	if debug{
 		configName=fmt.Sprintf("user-web/global/%sbug.yaml",configPrefix)
 	}

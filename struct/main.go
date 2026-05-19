@@ -11,7 +11,7 @@ type Employee struct{
 	age int
 	salary int
 }
-//访问结构的各个字段
+//Accessing individual fields of a struct
 func structview(){
 	em6:=Employee{
 		firstname:"小",
@@ -32,7 +32,7 @@ type Employee0 struct {
     age       int
     salary    int
 }
-//结构体的零值
+//Zero value of a struct
 func struct0(){
 	var emp4 Employee0 //zero valued struct
     fmt.Println("First Name:", emp4.firstName)
@@ -50,7 +50,7 @@ func struct1(){
     fmt.Println("Age:", emp5.age)
     fmt.Println("Salary:", emp5.salary)
 }
-//指向结构体的指针
+//Pointer to a struct
 func structPointer(){
 	emp8:=&Employee0{
 		firstName:"Sam",
@@ -65,7 +65,7 @@ type name struct {
     firstName string
     lastName  string
 }
-//结构平等
+//Struct equality
 func structEquality(){
 	name1 := name{
         firstName: "Steve",
@@ -99,7 +99,7 @@ type image struct{
 	data map[int]int
 
 }
-//如果结构变量包含不可比较的字段，则结构变量不可比较（感谢来自 reddit 的alasijia指出这一点）。
+//If a struct variable contains incomparable fields, the struct variable is incomparable (thanks to alasijia from reddit for pointing this out).
 func structNotEqual(){
 // image1 := image{
 //         data: map[int]int{

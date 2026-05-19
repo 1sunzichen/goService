@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 )
-//指针的零值
+//Zero value of a pointer
 func nil1(){
 		a:=25
 		var b *int
@@ -14,7 +14,7 @@ func nil1(){
 		}
 	
 }
-//使用新函数创建指针
+//Creating a pointer using the new function
 func funcPointer(){
 	size:=new(int)
 	fmt.Printf("Size value is %d,type is %T,address is %v\n",*size,size,size)
@@ -26,28 +26,30 @@ func cancelPointer(){
 	a:=&b
 	fmt.Println("address of b is",a)
 }
-//函数返回指针
+//Function returning a pointer
 func hello() *int{
 	i:=5
 	return &i
 }
-//不要将指向数组的指针作为参数传递给函数。改用切片。
+//Do not pass a pointer to an array as a parameter to a function. Use slices instead.
 func arrayFunc(arr *[3]int){
 	(*arr)[0]=90
 }
-//尽管这种将指向数组的指针作为参数传递给函数并对其进行修改的方式有效，但这并不是 Go 中实现此目的的惯用方式。我们有切片。
+//Although passing a pointer to an array to a function and modifying it works, this is not the idiomatic way to achieve this in Go. We have slices.
 func arrayFunc1(){
 	a := [3]int{89, 90, 91}
     arrayFunc(&a)
     fmt.Println(a)
 }
-//基于同一个数组或切片创建的不同切片都共享同一个底层数组。如果一个切片修改了该底层数组的共享部分，其他切片和原始数组或切片都能感知到。其底层数据结构如下面两个图所示：
-//共享同一底层数组
-//切片 slices
+//Different slices created from the same array or slice all share the same underlying array.
+//If one slice modifies the shared portion of the underlying array, other slices and the original
+//array or slice will all perceive the change. The underlying data structure is shown in the two diagrams below:
+//Share the same underlying array
+//Slice slices
 func sliceFunc(sls []int) {  
     sls[0] = 90
 }
-//切片 slices2
+//Slice slices2
 func sliceFunc2() {  
     a := [3]int{89, 90, 91}
     sliceFunc(a[:])

@@ -13,7 +13,7 @@ type ServerStruct struct{
 }
 func main(){
 	v:=viper.New()
-	//文件路径如何设置
+	// configure file path
 	v.SetConfigFile("configbug.yaml")
 	if err:=v.ReadInConfig();err!=nil{
 		panic(err)

@@ -1,6 +1,6 @@
 package main
 import ("fmt")
-//可变参数
+//Variadic parameters
 func hello(a int,b ...int){
 	 fmt.Print(a,b)
 }

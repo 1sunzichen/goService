@@ -24,8 +24,8 @@ type UserServer struct{
 
 
 func ModelToRep(user model.User)proto.UserInfoRes{
-	//grpc 的message字段 有默认值 你不能随便赋值nil进去，容易出错
-	// 这里要搞清，哪些字段是有默认值的
+	//gRPC message fields have default values; you cannot arbitrarily assign nil to them, it's error-prone.
+	// Here you need to figure out which fields have default values.
 	userInfoResponse:= proto.UserInfoRes{
 		Id: user.ID,
 		PassWord: user.Password,
@@ -90,7 +90,7 @@ func (c *UserServer) GetUserMobile(ctx context.Context, req *proto.MobileReq) (*
 	return &userRep,nil
 }
 func (c *UserServer) GetUserId(ctx context.Context, req *proto.IdReq) (*proto.UserInfoRes, error){
-	//通过ID 查询用户
+	//Query user by ID
 	var user model.User
 	result:=global.DB.First(&user,req.Id)
 	if result.RowsAffected==0{
@@ -141,7 +141,7 @@ func (c *UserServer) UpdateUser(ctx context.Context, req *proto.UpdateUserInfo) 
 	return &empty.Empty{},nil
 }
 func (c *UserServer) CheckPassWord(ctx context.Context, req *proto.PassWordInfo) (*proto.CheckRes, error) {
-	//校验密码
+	//Verify password
 	passwordInfo:=strings.Split(req.EncryptedPassword,"$")
 	options := &password.Options{16, 100, 32, sha512.New}
 

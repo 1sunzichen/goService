@@ -1,19 +1,21 @@
 package main
-// 何时使用指针接收器，何时使用值接收器
-// 通常，当在方法内部对接收器所做的更改应该对调用者可见时，可以使用指针接收器。
-// 指针接收器也可用于复制数据结构成本高昂的地方。考虑一个具有许多字段的结构。
-// 将此结构用作方法中的值接收器将需要复制整个结构，这将是昂贵的。在这种情况下，
-// 如果使用指针接收器，则不会复制该结构，而在方法中仅使用指向它的指针。
-// 在所有其他情况下，可以使用值接收器。
+// When to use pointer receivers vs value receivers
+// Generally, pointer receivers are used when changes made to the receiver inside the method
+// should be visible to the caller. Pointer receivers can also be used where copying a data
+// structure is expensive. Consider a struct with many fields. Using this struct as a value
+// receiver in a method would require copying the entire struct, which would be expensive.
+// In this case, if a pointer receiver is used, the struct is not copied and only a pointer
+// to it is used in the method.
+// In all other cases, value receivers can be used.
 
 
 
-// 方法中的值接收器与函数中的值参数
-// 这个话题旅行最适合新手。我会尽量说清楚😀。
+// Value receivers in methods vs value parameters in functions
+// This topic is most suitable for beginners. I'll try to explain it clearly 😀.
 
-// 当一个函数有一个值参数时，它将只接受一个值参数。
+// When a function has a value parameter, it will only accept a value argument.
 
-// 当一个方法有一个值接收器时，它将同时接受指针和值接收器
+// When a method has a value receiver, it will accept both pointer and value receivers.
 import (
 	"fmt"
 	"math"
@@ -51,7 +53,7 @@ Method with value receiver
 func (e Employee1) changeName(newName string) {  
     e.name = newName
 }
-//要在类型上定义方法，接收者类型的定义和方法的定义应该存在于同一个包中。
+//To define a method on a type, the receiver type definition and the method definition should exist in the same package.
 //func (a int)add(b int){
 //
 //}

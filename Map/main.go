@@ -37,7 +37,7 @@ func deletemap2(){
 	fmt.Println("map after deletion",employeeSalary3)
 }
 func yinyong(){
-	//map 引用类型
+	//map is a reference type
 	employeeSalary := map[string]int{
         "steve": 12000,
         "jamie": 15000,     
@@ -59,7 +59,7 @@ func yinshepingdeng(){
     // if map1 === map2 {
 	// 	fmt.Print("xiangdeng")
     // }else{
-	// 	fmt.Print("不相等")
+	// fmt.Print("not equal")
 	// }
 }
 func main(){

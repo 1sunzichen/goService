@@ -30,7 +30,7 @@ func slice3(){
     fruitslice = fruitslice[:4] //re-slicing furitslice till its capacity
     fmt.Println("After re-slicing length is",len(fruitslice), "and capacity is",cap(fruitslice))
 }
-// copy 切片之后 不再引用数组  可以对原始数组垃圾回收  内存优化
+// After copying a slice, it no longer references the array; the original array can be garbage collected, optimizing memory usage.
 func countries()[]string{
 	countries:=[]string{"USA","Singapore","Germany","India","Australia"}
 	needCountries:=countries[:len(countries)-2]

@@ -23,7 +23,7 @@ func main(){
 	configPrefix:="config"
 	configName:=fmt.Sprintf("%spro.yaml",configPrefix)
 	v:=viper.New()
-	//文件路径如何设置
+	// configure file path
 	if debug{
 		configName=fmt.Sprintf("%sbug.yaml",configPrefix)
 	}

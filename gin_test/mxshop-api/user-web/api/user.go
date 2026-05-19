@@ -17,7 +17,7 @@ import (
 )
 
 func HandleGrpcErrorToHttp(err error,c *gin.Context){
-	//将grpc 的code转换成http的状态玛
+	// convert gRPC status code to HTTP status code
 	if err!=nil{
 		if e,ok:=status.FromError(err);ok{
 			switch e.Code() {
@@ -49,13 +49,13 @@ func HandleGrpcErrorToHttp(err error,c *gin.Context){
 func GetUserList(c *gin.Context){
 	//ip:="127.0.0.1"
 	//port:=50051
-	//拨号链接用户服务器
+	// dial connection to user server
 	userConn,err:=grpc.Dial(fmt.Sprintf("%s:%d",global.ServerConfig.UserSrvInfo.Host,global.ServerConfig.UserSrvInfo.Port ),grpc.WithInsecure())
 	if err!=nil{
 		zap.S().Errorw("[getuserlist] 链接【用户服务失败】",
 			"msg",err.Error())
 	}
-	//生成grpc的client并调用接口
+	// create gRPC client and call the interface
 	userSrvClient:=proto.NewUserClient(userConn)
 	//
 	pn:=c.DefaultQuery("pn","0")
